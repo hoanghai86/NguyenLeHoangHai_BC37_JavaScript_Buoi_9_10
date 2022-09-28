@@ -123,9 +123,10 @@ function deleteStaff(staffId) {
 //hàm có chức năng tìm kiếm theo xếp loại nhân viên
 function searchStaff(){
   var keyword = document.getElementById("searchName").value.toLowerCase().trim();
+
   var search = [];
   for (var i = 0; i < staffList.length; i++) {
-    var classification = staffList[i].classification;
+    var classification = staffList[i].classification().toLowerCase();
     //nếu trong xếp loại có chứa từ khóa tìm kiếm do người dùng nhập vào
     if(classification.includes(keyword)){
       search.push(staffList[i]); //quăng những nhân viên có xếp loại thỏa điều kiện tìm kiếm vào mảng để in ra
