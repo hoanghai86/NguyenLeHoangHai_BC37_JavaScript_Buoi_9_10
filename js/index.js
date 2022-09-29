@@ -43,7 +43,7 @@ function createStaff() {
 // hàm in bảng danh sách nhân viên ra màn hình
 function renderStaff(data) {
   //nếu trong hàm không truyền mảng data nào thì ta gán mặc định là truyền mảng staffList
-  if(!data) data = staffList;
+  if (!data) data = staffList;
 
   var tableHTML = "";
   for (var i = 0; i < data.length; i++) {
@@ -57,6 +57,9 @@ function renderStaff(data) {
         <td>${currentStaff.position}</td>
         <td>${currentStaff.totalSalary()}</td>
         <td>${currentStaff.classification()}</td>
+        <td><button class="btn btn-primary" id="btnSua" data-toggle="modal" data-target="#myModal" onclick="getUpdateStaff('${
+          currentStaff.staffId
+        }')">Sửa</button></td>
         <td><button class="btn btn-danger" onclick="deleteStaff('${
           currentStaff.staffId
         }')">Xóa</button></td>
@@ -121,18 +124,64 @@ function deleteStaff(staffId) {
 }
 
 //hàm có chức năng tìm kiếm theo xếp loại nhân viên
-function searchStaff(){
-  var keyword = document.getElementById("searchName").value.toLowerCase().trim();
+function searchStaff() {
+  var keyword = document
+    .getElementById("searchName")
+    .value.toLowerCase()
+    .trim();
 
   var search = [];
   for (var i = 0; i < staffList.length; i++) {
     var classification = staffList[i].classification().toLowerCase();
     //nếu trong xếp loại có chứa từ khóa tìm kiếm do người dùng nhập vào
-    if(classification.includes(keyword)){
+    if (classification.includes(keyword)) {
       search.push(staffList[i]); //quăng những nhân viên có xếp loại thỏa điều kiện tìm kiếm vào mảng để in ra
     }
   }
   renderStaff(search); //in mảng tìm kiếm ra màn hình
+}
+
+//hàm có chức năng lấy thông tin nhân viên cần sửa lên form modal
+function getUpdateStaff(staffId) {
+  var index = findByID(staffId);
+  if (index == -1) {
+    return alert("Mã nhân viên không tồn tại !!!");
+  }
+
+  var staff = staffList[index];
+  document.getElementById("tknv").value = staff.staffId;
+  document.getElementById("name").value = staff.fullName;
+  document.getElementById("email").value = staff.email;
+  document.getElementById("password").value = staff.password;
+  document.getElementById("datepicker").value = staff.datepicker;
+  document.getElementById("luongCB").value = staff.basicSalary;
+  document.getElementById("chucvu").value = staff.position;
+  document.getElementById("gioLam").value = staff.workTime;
+}
+
+//cho người dùng sửa thông tin trên modal form, nhất nút cập nhật, chạy hàm này
+function updateStaff() {
+  var staffId = document.getElementById("tknv").value;
+  var fullName = document.getElementById("name").value;
+  var email = document.getElementById("email").value;
+  var password = document.getElementById("password").value;
+  var datepicker = document.getElementById("datepicker").value;
+  var basicSalary = +document.getElementById("luongCB").value;
+  var position = document.getElementById("chucvu").value;
+  var workTime = +document.getElementById("gioLam").value;
+
+  var index = findByID(staffId); //tìm vị trí nhân viên muốn sửa dựa vào mã nhân viên
+  var staff = staffList[index];
+  staff.fullName = fullName;
+  staff.email = email;
+  staff.password = password;
+  staff.datepicker=datepicker;
+  staff.basicSalary = basicSalary;
+  staff.position = position;
+  staffList.workTime = workTime;
+
+  setStaffList(); //lưu thông tin thay đổi xuống data
+  renderStaff(); //render lại giao diện
 }
 
 window.onload = function () {
