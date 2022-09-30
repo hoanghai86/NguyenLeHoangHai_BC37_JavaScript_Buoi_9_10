@@ -1,6 +1,10 @@
 var staffList = []; //tạo mảng rỗng chứa các đối tượng nhân viên
 //hàm có chức năng thêm mới danh sách nhân viên vào data
 function createStaff() {
+  //0.Kiểm tra dữ liệu đầu vào trước khi lưu
+  var isFormValid = validateForm();
+  if (!isFormValid) return;
+
   //1.Lấy thông tin người dùng nhập vô
   var staffId = document.getElementById("tknv").value;
   var fullName = document.getElementById("name").value;
@@ -57,10 +61,10 @@ function renderStaff(data) {
         <td>${currentStaff.position}</td>
         <td>${currentStaff.totalSalary()}</td>
         <td>${currentStaff.classification()}</td>
-        <td><button class="btn btn-primary" id="btnSua" data-toggle="modal" data-target="#myModal" onclick="getUpdateStaff('${
+        <td style="width: 150px;"><button class="btn btn-primary" id="btnSua" data-toggle="modal" data-target="#myModal" onclick="getUpdateStaff('${
           currentStaff.staffId
-        }')">Sửa</button></td>
-        <td><button class="btn btn-danger" onclick="deleteStaff('${
+        }')">Sửa</button>
+        <button class="btn btn-danger" onclick="deleteStaff('${
           currentStaff.staffId
         }')">Xóa</button></td>
         </tr>`;
@@ -157,6 +161,8 @@ function getUpdateStaff(staffId) {
   document.getElementById("luongCB").value = staff.basicSalary;
   document.getElementById("chucvu").value = staff.position;
   document.getElementById("gioLam").value = staff.workTime;
+
+  document.getElementById("tknv").disabled = true;
 }
 
 //cho người dùng sửa thông tin trên modal form, nhất nút cập nhật, chạy hàm này
@@ -175,13 +181,56 @@ function updateStaff() {
   staff.fullName = fullName;
   staff.email = email;
   staff.password = password;
-  staff.datepicker=datepicker;
+  staff.datepicker = datepicker;
   staff.basicSalary = basicSalary;
   staff.position = position;
   staffList.workTime = workTime;
 
   setStaffList(); //lưu thông tin thay đổi xuống data
   renderStaff(); //render lại giao diện
+
+  document.getElementById("btnReset").click(); //cài auto click nút reset
+  document.getElementById("tknv").disabled = false; //mở lại ô input mã nhân viên cho người dùng nhập
+}
+
+//VALIDATION FORM
+//Không được bỏ trống các ô input
+function require(val, spanId) {
+  if (val.length === 0) {
+    document.getElementById(spanId).style = "display: block";
+    document.getElementById(spanId).innerHTML = "*Trường này bắt buộc nhập";
+    return false;
+  }
+  document.getElementById(spanId).innerHTML = "";
+  return true;
+}
+
+function validateForm() {
+  var staffId = document.getElementById("tknv").value;
+  var fullName = document.getElementById("name").value;
+  var email = document.getElementById("email").value;
+  var password = document.getElementById("password").value;
+  var datepicker = document.getElementById("datepicker").value;
+  var basicSalary = document.getElementById("luongCB").value;
+  var position = document.getElementById("chucvu").value;
+  var workTime = document.getElementById("gioLam").value;
+
+  var isValid = true;
+  isValid &= require(staffId, "tbTKNV");
+  isValid &= require(fullName, "tbTen");
+  isValid &= require(email, "tbEmail");
+  isValid &= require(password, "tbMatKhau");
+  isValid &= require(datepicker, "tbNgay");
+  isValid &= require(basicSalary, "tbLuongCB");
+  isValid &= require(position, "tbChucVu");
+  isValid &= require(workTime, "tbGiolam");
+
+  return isValid;
+}
+
+//hàm có chức năng xóa thông báo "Trường này bắt buộc nhập" khi bấm nút "Thêm nhân viên"
+function resetFormInsertStaff() {
+  document.getElementsByClassName("#sp-thongbao").style = "display:none";
 }
 
 window.onload = function () {

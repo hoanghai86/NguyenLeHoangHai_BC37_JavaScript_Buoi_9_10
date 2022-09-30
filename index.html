@@ -114,7 +114,7 @@
 							</div>
 							<div class="col-md-6 text-right">
 								<button class="btn btn-primary" id="btnThem" data-toggle="modal"
-									data-target="#myModal">Thêm nhân viên</button>
+									data-target="#myModal" onclick="resetFormInsertStaff()">Thêm nhân viên</button>
 							</div>
 						</div>
 					</div>
@@ -253,7 +253,7 @@
 									<span class="input-group-text"><i class="fa fa-money" aria-hidden="true"></i></span>
 								</div>
 								<input type="text" name="luongCB" id="luongCB" class="form-control input-sm"
-									placeholder="Lương cơ bản">
+									placeholder="Lương cơ bản" value="">
 							</div>
 							<span class="sp-thongbao" id="tbLuongCB"></span>
 						</div>
@@ -263,7 +263,7 @@
 									<span class="input-group-text"><i class="fa fa-briefcase"></i></span>
 								</div>
 								<select class="form-control" id="chucvu">
-									<option>Chọn chức vụ</option>
+									<option value="">Chọn chức vụ</option>
 									<option>Sếp</option>
 									<option>Trưởng phòng</option>
 									<option>Nhân viên</option>
@@ -278,10 +278,12 @@
 									<span class="input-group-text"><i class="fa fa-clock-o" aria-hidden="true"></i></span>
 								</div>
 								<input type="text" name="gioLam" id="gioLam" class="form-control input-sm"
-									placeholder="Giờ làm">
+									placeholder="Giờ làm" value="">
 							</div>
 							<span class="sp-thongbao" id="tbGiolam"></span>
 						</div>
+
+						<button id="btnReset" type="reset" class="btn btn-dark" style="display: none;">Reset</button>
 
 					</form>
 				</div>
@@ -290,7 +292,7 @@
 				<div class="modal-footer" id="modal-footer">
 					<button id="btnThemNV" type="button" class="btn btn-success" onclick="createStaff()">Thêm người dùng</button>
 					<button id="btnCapNhat" type="button" class="btn btn-success" onclick="updateStaff()">Cập nhật</button>
-					<button id="btnDong" type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
+					<button id="btnDong" type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>										
 				</div>
 
 			</div>
