@@ -194,7 +194,7 @@ function updateStaff() {
 }
 
 //VALIDATION FORM
-//Không được bỏ trống các ô input
+//kiểm tra không được bỏ trống các ô input
 function require(val, spanId) {
   if (val.length === 0) {
     document.getElementById(spanId).style = "display: block";
@@ -203,6 +203,32 @@ function require(val, spanId) {
   }
   document.getElementById(spanId).innerHTML = "";
   return true;
+}
+
+//kiểm tra nhập đúng độ dài ký tự
+function checkLength(val, spanId, min, max) {
+  if (val.length < min || val.length > max) {
+    document.getElementById(spanId).style = "display: block";
+    document.getElementById(
+      spanId
+    ).innerHTML = `*Độ dài phải từ ${min} tới ${max} ký tự`;
+    return false;
+  }
+  document.getElementById(spanId).innerHTML = "";
+  return true;
+}
+
+//kiểm tra nhập đúng định dạng
+function checkString(val, spanId) {
+  var pattern = /^[A-z0-9]+$/g;
+  if (pattern.test(val)) {
+    document.getElementById(spanId).innerHTML = "";
+    return true;
+  }
+  document.getElementById(spanId).style = "display: block";
+  document.getElementById(spanId).innerHTML =
+    "*Vui lòng nhập theo mẫu: NV001, NV002...";
+  return false;
 }
 
 function validateForm() {
@@ -216,21 +242,21 @@ function validateForm() {
   var workTime = document.getElementById("gioLam").value;
 
   var isValid = true;
-  isValid &= require(staffId, "tbTKNV");
-  isValid &= require(fullName, "tbTen");
-  isValid &= require(email, "tbEmail");
-  isValid &= require(password, "tbMatKhau");
-  isValid &= require(datepicker, "tbNgay");
-  isValid &= require(basicSalary, "tbLuongCB");
-  isValid &= require(position, "tbChucVu");
-  isValid &= require(workTime, "tbGiolam");
+  isValid &= require(staffId, "tbTKNV") && checkLength(staffId, "tbTKNV", 4, 6) && checkString(staffId, "tbTKNV");
+  // isValid &= require(fullName, "tbTen");
+  // isValid &= require(email, "tbEmail");
+  // isValid &= require(password, "tbMatKhau");
+  // isValid &= require(datepicker, "tbNgay");
+  // isValid &= require(basicSalary, "tbLuongCB");
+  // isValid &= require(position, "tbChucVu");
+  // isValid &= require(workTime, "tbGiolam");
 
   return isValid;
 }
 
 //hàm có chức năng xóa thông báo "Trường này bắt buộc nhập" khi bấm nút "Thêm nhân viên"
 function resetFormInsertStaff() {
-  document.getElementsByClassName("#sp-thongbao").style = "display:none";
+  document.getElementById("tbTKNV").style.display = "none";
 }
 
 window.onload = function () {
