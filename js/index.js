@@ -42,6 +42,11 @@ function createStaff() {
   renderStaff();
   //6.lưu danh sách nhân viên vào localStorage
   setStaffList();
+  //7.Xóa ô input để người dùng có thể nhập tiếp
+  document.getElementById("btnReset").click();
+
+  //8.Focus con trỏ chuột vào ô tài khoản
+  document.getElementById("tknv").focus();
 }
 
 // hàm in bảng danh sách nhân viên ra màn hình
@@ -218,8 +223,9 @@ function checkLength(val, spanId, min, max) {
   return true;
 }
 
-//kiểm tra nhập đúng định dạng
-function checkString(val, spanId) {
+
+//kiểm tra nhập đúng định dạng trường "Tài khoản"
+function checkStringStaffId(val, spanId) {
   var pattern = /^[A-z0-9]+$/g;
   if (pattern.test(val)) {
     document.getElementById(spanId).innerHTML = "";
@@ -230,6 +236,39 @@ function checkString(val, spanId) {
     "*Vui lòng nhập theo mẫu: NV001, NV002...";
   return false;
 }
+
+//kiểm tra tên nhân viên (Tên nhân viên phải là chữ)
+function checkStringFullName(val, spanId){
+    var pattern =
+    /^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s\W|_]+$/g;
+
+  if (pattern.test(val)) {
+    document.getElementById(spanId).innerHTML = "";
+    return true;
+  }
+  document.getElementById(spanId).style = "display: block";
+  document.getElementById(spanId).innerHTML = "*Trường này chỉ được gõ chữ !!!";
+  return false;
+}
+
+//kiểm tra định dạng email
+function checkStringEmail(val, spanId){
+  var pattern = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/g;
+  if(pattern.test(val)){
+    document.getElementById(spanId).innerHTML = "";
+    return true;
+  }
+  document.getElementById(spanId).style = "display: block";
+  document.getElementById(spanId).innerHTML = "*Vui lòng nhập đúng định dạng email !!!"
+}
+
+//kiểm tra định dạng mật khẩu (chứa ít nhất 1 ký tự số, 1 ký tự in hoa, 1 ký tự đặc biệt))
+function checkStringPassword(val, spanId){
+  
+}
+
+
+
 
 function validateForm() {
   var staffId = document.getElementById("tknv").value;
@@ -242,10 +281,10 @@ function validateForm() {
   var workTime = document.getElementById("gioLam").value;
 
   var isValid = true;
-  isValid &= require(staffId, "tbTKNV") && checkLength(staffId, "tbTKNV", 4, 6) && checkString(staffId, "tbTKNV");
-  // isValid &= require(fullName, "tbTen");
-  // isValid &= require(email, "tbEmail");
-  // isValid &= require(password, "tbMatKhau");
+  isValid &= require(staffId, "tbTKNV") && checkLength(staffId, "tbTKNV", 4, 6) && checkStringStaffId(staffId, "tbTKNV");
+  isValid &= require(fullName, "tbTen") && checkStringFullName(fullName, "tbTen");
+  isValid &= require(email, "tbEmail") && checkStringEmail(email, "tbEmail");
+  isValid &= require(password, "tbMatKhau") && checkLength(password, "tbMatKhau", 6, 10);
   // isValid &= require(datepicker, "tbNgay");
   // isValid &= require(basicSalary, "tbLuongCB");
   // isValid &= require(position, "tbChucVu");
@@ -256,7 +295,17 @@ function validateForm() {
 
 //hàm có chức năng xóa thông báo "Trường này bắt buộc nhập" khi bấm nút "Thêm nhân viên"
 function resetFormInsertStaff() {
+  document.getElementById("btnReset").click();
+  document.getElementById("tknv").disabled = false;
   document.getElementById("tbTKNV").style.display = "none";
+  document.getElementById("tbTKNV").style.display = "none";
+  document.getElementById("tbTen").style.display = "none";
+  document.getElementById("tbEmail").style.display = "none";
+  document.getElementById("tbMatKhau").style.display = "none";
+  document.getElementById("tbNgay").style.display = "none";
+  document.getElementById("tbLuongCB").style.display = "none";
+  document.getElementById("tbChucVu").style.display = "none";
+  document.getElementById("tbGiolam").style.display = "none";
 }
 
 window.onload = function () {
