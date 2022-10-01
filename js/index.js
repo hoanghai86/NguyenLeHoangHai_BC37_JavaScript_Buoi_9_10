@@ -223,7 +223,6 @@ function checkLength(val, spanId, min, max) {
   return true;
 }
 
-
 //kiểm tra nhập đúng định dạng trường "Tài khoản"
 function checkStringStaffId(val, spanId) {
   var pattern = /^[A-z0-9]+$/g;
@@ -238,8 +237,8 @@ function checkStringStaffId(val, spanId) {
 }
 
 //kiểm tra tên nhân viên (Tên nhân viên phải là chữ)
-function checkStringFullName(val, spanId){
-    var pattern =
+function checkStringFullName(val, spanId) {
+  var pattern =
     /^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s\W|_]+$/g;
 
   if (pattern.test(val)) {
@@ -252,23 +251,44 @@ function checkStringFullName(val, spanId){
 }
 
 //kiểm tra định dạng email
-function checkStringEmail(val, spanId){
+function checkStringEmail(val, spanId) {
   var pattern = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/g;
-  if(pattern.test(val)){
+  if (pattern.test(val)) {
     document.getElementById(spanId).innerHTML = "";
     return true;
   }
   document.getElementById(spanId).style = "display: block";
-  document.getElementById(spanId).innerHTML = "*Vui lòng nhập đúng định dạng email !!!"
+  document.getElementById(spanId).innerHTML =
+    "*Vui lòng nhập đúng định dạng email !!!";
 }
 
 //kiểm tra định dạng mật khẩu (chứa ít nhất 1 ký tự số, 1 ký tự in hoa, 1 ký tự đặc biệt))
-function checkStringPassword(val, spanId){
-  
+function checkStringPassword(val, spanId) {
+  var pattern =
+    /^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*])[A-z0-9!@#$%^&*]{6,10}$/g;
+  if (pattern.test(val)) {
+    document.getElementById(spanId).innerHTML = "";
+    return true;
+  }
+  document.getElementById(spanId).style = "display: block";
+  document.getElementById(spanId).innerHTML =
+    "*Mật khẩu phải chứa ít nhất 1 ký tự số, 1 ký tự in hoa, 1 ký tự đặc biệt !!!";
 }
 
+//kiểm tra ngày tháng theo định dạng mm/dd/yyyy
+function checkDatePicker(val, spanId) {
+  var pattern = /^(0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])[\/\-]\d{4}$/g;
+  if (pattern.test(val)) {
+    document.getElementById(spanId).innerHTML = "";
+    return true;
+  }
+  document.getElementById(spanId).style = "display: block";
+  document.getElementById(spanId).innerHTML =
+    "*Vui lòng nhập đúng định dạng mm/dd/yyyy !!!";
+}
 
-
+//kiểm tra tiền lương nhập vào (Lương cơ bản từ 1 triệu đến 20 triệu)
+function checkStringBasicSalary(val, spanId) {}
 
 function validateForm() {
   var staffId = document.getElementById("tknv").value;
@@ -281,12 +301,20 @@ function validateForm() {
   var workTime = document.getElementById("gioLam").value;
 
   var isValid = true;
-  isValid &= require(staffId, "tbTKNV") && checkLength(staffId, "tbTKNV", 4, 6) && checkStringStaffId(staffId, "tbTKNV");
-  isValid &= require(fullName, "tbTen") && checkStringFullName(fullName, "tbTen");
+  isValid &=
+    require(staffId, "tbTKNV") &&
+    checkLength(staffId, "tbTKNV", 4, 6) &&
+    checkStringStaffId(staffId, "tbTKNV");
+  isValid &=
+    require(fullName, "tbTen") && checkStringFullName(fullName, "tbTen");
   isValid &= require(email, "tbEmail") && checkStringEmail(email, "tbEmail");
-  isValid &= require(password, "tbMatKhau") && checkLength(password, "tbMatKhau", 6, 10);
-  // isValid &= require(datepicker, "tbNgay");
-  // isValid &= require(basicSalary, "tbLuongCB");
+  isValid &=
+    require(password, "tbMatKhau") &&
+    checkLength(password, "tbMatKhau", 6, 10) &&
+    checkStringPassword(password, "tbMatKhau");
+  isValid &=
+    require(datepicker, "tbNgay") && checkDatePicker(datepicker, "tbNgay");
+  isValid &= require(basicSalary, "tbLuongCB");
   // isValid &= require(position, "tbChucVu");
   // isValid &= require(workTime, "tbGiolam");
 
