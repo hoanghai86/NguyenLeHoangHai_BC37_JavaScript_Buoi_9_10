@@ -141,7 +141,7 @@
 									</th>
 									<th>Họ và tên</th>
 									<th>Email</th>
-									<th>Ngày làm</th>
+									<th>Giờ làm</th>
 									<th>Chức vụ</th>									
 									<th>Tổng lương</th>
 									<th>Xếp loại</th>
@@ -152,6 +152,72 @@
 
 							</tbody>
 						</table>
+					</div>
+
+					<br>
+
+					<!-- bảng tính lương -->
+					<div class="card w-100 mx-auto">
+						<div class="card-header text-primary text-left font-weight-bold h3">Bảng tính lương</div>
+						<div class="card-body">
+							<table class="table table-bordered table-hover">
+								<thead class="text-primary">
+									<tr>
+										<th class="col-6">Vị trí</th>	
+										<th class="col-6">Tổng Lương</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>Giám đốc</td>
+										<td>Hệ số 3</td>
+									</tr>
+									<tr>
+										<td>Trưởng phòng</td>
+										<td>Hệ số 2</td>
+									</tr>
+									<tr>
+										<td>Nhân viên</td>
+										<td>Hệ số 1</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+
+					<br>
+
+					<!-- bảng xếp loại nhân viên -->
+					<div class="card w-100 mx-auto">
+						<div class="card-header text-primary text-left font-weight-bold h3">Bảng xếp loại nhân viên</div>
+						<div class="card-body">
+							<table class="table table-bordered table-hover">
+								<thead class="text-primary">
+									<tr>
+										<th>Giờ làm</th>	
+										<th>Xếp loại</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td class="col-6">Nếu nhân viên có giờ làm trên 192h (>=192)</td>
+										<td class="col-6">Xuất sắc</td>
+									</tr>
+									<tr>
+										<td>Nếu nhân viên có giờ làm trên 176h (>=176)</td>
+										<td>Giỏi</td>
+									</tr>
+									<tr>
+										<td>Nếu nhân viên có giờ làm trên 160h (>=160)</td>
+										<td>Khá</td>
+									</tr>
+									<tr>
+										<td>Nếu nhân viên có giờ làm dưới 160h</td>
+										<td>Trung bình</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
 					</div>
 
 					<!-- Footer -->
@@ -292,7 +358,7 @@
 				<div class="modal-footer" id="modal-footer">
 					<button id="btnThemNV" type="button" class="btn btn-success" onclick="createStaff()">Thêm người dùng</button>
 					<button id="btnCapNhat" type="button" class="btn btn-success" onclick="updateStaff()">Cập nhật</button>
-					<button id="btnDong" type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>										
+					<button id="btnDong" type="button" class="btn btn-danger" data-dismiss="modal" onclick="resetFormInsertStaff()">Đóng</button>										
 				</div>
 
 			</div>

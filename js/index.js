@@ -64,7 +64,7 @@ function renderStaff(data) {
         <td>${currentStaff.email}</td>
         <td>${currentStaff.workTime}</td>
         <td>${currentStaff.position}</td>
-        <td>${currentStaff.totalSalary()}</td>
+        <td>${currentStaff.totalSalary().toLocaleString()}</td>
         <td>${currentStaff.classification()}</td>
         <td style="width: 150px;"><button class="btn btn-primary" id="btnSua" data-toggle="modal" data-target="#myModal" onclick="getUpdateStaff('${
           currentStaff.staffId
@@ -167,11 +167,15 @@ function getUpdateStaff(staffId) {
   document.getElementById("chucvu").value = staff.position;
   document.getElementById("gioLam").value = staff.workTime;
 
-  document.getElementById("tknv").disabled = true;
+  document.getElementById("tknv").disabled = true; //không cho user sửa mã nhân viên
 }
 
 //cho người dùng sửa thông tin trên modal form, nhất nút cập nhật, chạy hàm này
 function updateStaff() {
+  //chạy hàm kiểm tra dữ liệu đầu vào trước khi lưu update
+  var isFormValid = validateForm();
+  if (!isFormValid) return;
+
   var staffId = document.getElementById("tknv").value;
   var fullName = document.getElementById("name").value;
   var email = document.getElementById("email").value;
@@ -189,7 +193,7 @@ function updateStaff() {
   staff.datepicker = datepicker;
   staff.basicSalary = basicSalary;
   staff.position = position;
-  staffList.workTime = workTime;
+  staff.workTime = workTime;
 
   setStaffList(); //lưu thông tin thay đổi xuống data
   renderStaff(); //render lại giao diện
@@ -288,7 +292,30 @@ function checkDatePicker(val, spanId) {
 }
 
 //kiểm tra tiền lương nhập vào (Lương cơ bản từ 1 triệu đến 20 triệu)
-function checkStringBasicSalary(val, spanId) {}
+function checkStringBasicSalary(val, spanId, min, max) {
+  if (val < min || val > max) {
+    document.getElementById(spanId).style = "display: block";
+    document.getElementById(
+      spanId
+    ).innerHTML = `*Tiền lương quy định từ ${min.toLocaleString()} triệu đến ${max.toLocaleString()} triệu`; //hàm toLocaleString để format number
+    return false;
+  }
+  document.getElementById(spanId).innerHTML = "";
+  return true;
+}
+
+//kiểm tra số giờ làm trong tháng từ 80 - 200 giờ
+function checkWorkTime(val, spanId, min, max) {
+  if (val < min || val > max) {
+    document.getElementById(spanId).style = "display: block";
+    document.getElementById(
+      spanId
+    ).innerHTML = `*Số giờ làm trong tháng phải từ ${min} - ${max} giờ`;
+    return false;
+  }
+  document.getElementById(spanId).innerHTML = "";
+  return true;
+}
 
 function validateForm() {
   var staffId = document.getElementById("tknv").value;
@@ -296,9 +323,9 @@ function validateForm() {
   var email = document.getElementById("email").value;
   var password = document.getElementById("password").value;
   var datepicker = document.getElementById("datepicker").value;
-  var basicSalary = document.getElementById("luongCB").value;
+  var basicSalary = +document.getElementById("luongCB").value;
   var position = document.getElementById("chucvu").value;
-  var workTime = document.getElementById("gioLam").value;
+  var workTime = +document.getElementById("gioLam").value;
 
   var isValid = true;
   isValid &=
@@ -314,9 +341,13 @@ function validateForm() {
     checkStringPassword(password, "tbMatKhau");
   isValid &=
     require(datepicker, "tbNgay") && checkDatePicker(datepicker, "tbNgay");
-  isValid &= require(basicSalary, "tbLuongCB");
-  // isValid &= require(position, "tbChucVu");
-  // isValid &= require(workTime, "tbGiolam");
+  isValid &=
+    require(basicSalary, "tbLuongCB") &&
+    checkStringBasicSalary(basicSalary, "tbLuongCB", 1000000, 20000000);
+  isValid &= require(position, "tbChucVu");
+  isValid &=
+    require(workTime, "tbGiolam") &&
+    checkWorkTime(workTime, "tbGiolam", 80, 200);
 
   return isValid;
 }
